@@ -82,7 +82,7 @@ class observers_test extends advanced_testcase {
         ob_end_clean();
 
         // The group from the parent should have been created in linked course.
-        $linkedgroup = $DB->get_record('groups', ['courseid' => $course->id, 'idnumber' => $this->group->id], '*', MUST_EXIST);
+        $linkedgroup = $DB->get_record('groups', ['courseid' => $course->id, 'idnumber' => $this->group->idnumber], '*', MUST_EXIST);
         $this->assertSame($this->group->name, $linkedgroup->name);
     }
 
@@ -98,7 +98,7 @@ class observers_test extends advanced_testcase {
         enrol_get_plugin('meta')->delete_instance($instance);
 
         // The group should also have been deleted in linked course.
-        $exists = $DB->record_exists('groups', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $exists = $DB->record_exists('groups', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
         $this->assertFalse($exists);
     }
 
@@ -111,7 +111,7 @@ class observers_test extends advanced_testcase {
         global $DB;
 
         // The group should also have been created in linked course.
-        $linkedgroupname = $DB->get_field('groups', 'name', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $linkedgroupname = $DB->get_field('groups', 'name', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
         $this->assertSame($this->group->name, $linkedgroupname);
     }
 
@@ -127,7 +127,7 @@ class observers_test extends advanced_testcase {
         groups_update_group($this->group);
 
         // The group should also have been updated in linked course.
-        $linkedgroupname = $DB->get_field('groups', 'name', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $linkedgroupname = $DB->get_field('groups', 'name', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
         $this->assertSame($this->group->name, $linkedgroupname);
     }
 
@@ -142,7 +142,7 @@ class observers_test extends advanced_testcase {
         groups_delete_group($this->group);
 
         // The group should also have been deleted in linked course.
-        $exists = $DB->record_exists('groups', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $exists = $DB->record_exists('groups', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
         $this->assertFalse($exists);
     }
 
@@ -158,7 +158,7 @@ class observers_test extends advanced_testcase {
         $this->getDataGenerator()->create_group_member(['groupid' => $this->group->id, 'userid' => $user->id]);
 
         // User should also be a member of group in linked course.
-        $linkedgroupid = $DB->get_field('groups', 'id', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $linkedgroupid = $DB->get_field('groups', 'id', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
 
         $exists = $DB->record_exists('groups_members',
             ['groupid' => $linkedgroupid, 'userid' => $user->id, 'component' => 'local_metagroups', 'itemid' => $this->group->id]);
@@ -179,7 +179,7 @@ class observers_test extends advanced_testcase {
         groups_remove_member($this->group, $user);
 
         // User should no longer be a member of group in linked course.
-        $linkedgroupid = $DB->get_field('groups', 'id', ['courseid' => $this->course2->id, 'idnumber' => $this->group->id]);
+        $linkedgroupid = $DB->get_field('groups', 'id', ['courseid' => $this->course2->id, 'idnumber' => $this->group->idnumber]);
 
         $exists = $DB->record_exists('groups_members',
             ['groupid' => $linkedgroupid, 'userid' => $user->id, 'component' => 'local_metagroups', 'itemid' => $this->group->id]);
